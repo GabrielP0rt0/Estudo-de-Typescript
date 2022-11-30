@@ -11,18 +11,20 @@ export class NegociacaoController {
   private negociacoes= new Negociacoes()
   private negociacoesView = new NegociacoesView('#negociacoesView')
   private mensagemView = new MensagemView('#mensagemView')
-  private readonly SABADO = 6
-  private readonly DOMINGO = 0
 
   constructor() {
-    this.inputData = document.querySelector('#data')
-    this.inputQuantidade = document.querySelector('#quantidade')
-    this.inputValor = document.querySelector('#valor')
+    this.inputData = document.querySelector('#data') as HTMLInputElement
+    this.inputQuantidade = document.querySelector('#quantidade') as HTMLInputElement
+    this.inputValor = document.querySelector('#valor') as HTMLInputElement
     this.negociacoesView.update(this.negociacoes)
     }
 
   public adiciona(): void {
-    const negociacao = this.criaNegociacao()
+    const negociacao = Negociacao.criaDe(
+      this.inputData.value,
+      this.inputQuantidade.value, 
+      this.inputValor.value
+    )
     if (!this.checkDia(negociacao.data)){
       this.mensagemView.update('Apenas negociações em dias úteis!!')
       return
@@ -34,14 +36,6 @@ export class NegociacaoController {
 
   private checkDia(data: Date): boolean {
     return data.getDay() > DiaDaSemana.DOMINGO && data.getDay() < DiaDaSemana.SABADO
-  }
-
-  private criaNegociacao(): Negociacao{
-    const exp =/-/g
-    const data = new Date(this.inputData.value.replace(exp, ','))
-    const quantidade = parseInt(this.inputQuantidade.value)
-    const valor = parseFloat(this.inputValor.value)
-    return new Negociacao(data, quantidade, valor)
   }
 
   private limparFormulario(): void {
