@@ -1,1 +1,1 @@
-# Estudo-de-Typscript
+# Estudo-de-Typescript
